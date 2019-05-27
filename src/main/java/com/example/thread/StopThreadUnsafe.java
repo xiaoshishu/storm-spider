@@ -73,8 +73,12 @@ public class StopThreadUnsafe {
         }
     }
 
+    public static class Teacher{
+
+    }
 
 
+    // 启动
     public static void main(String[] args) throws  Exception{
         new ReadObjectThread().start();
         while (true){
@@ -82,6 +86,7 @@ public class StopThreadUnsafe {
             t.start();
             Thread.sleep(150);
             t.stop();
+
         }
     }
 
