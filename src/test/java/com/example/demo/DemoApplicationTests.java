@@ -1,15 +1,18 @@
 package com.example.demo;
 
+
 import com.example.demo.model.Company;
 import com.example.demo.repository.CompanyRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.model.User;
+import com.example.demo.service.impl.TestServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +27,9 @@ public class DemoApplicationTests {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    TestServiceImpl testService;
 
     @Test
     public void contextLoads() {
@@ -54,5 +60,9 @@ public class DemoApplicationTests {
 
     }
 
+    @Test
+    public void testAnnation(){
+        testService.test();
+    }
 
 }

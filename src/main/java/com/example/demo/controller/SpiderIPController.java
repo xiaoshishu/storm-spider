@@ -26,7 +26,7 @@ public class SpiderIPController implements CommandLineRunner {
             System.out.println("开始抓取");
             Spider.create(spiderService).addUrl("http://www.cn716.com/company").thread(1).run();
         }*/
-        /*System.out.println("开始抓取");
+        /*System.out.println("开始抓取"); 163.204.247.2  9999   103.205.14.1	8080
         Spider.create(spiderIPService).addUrl("http://www.89ip.cn/").thread(5).run();*/
 
     }

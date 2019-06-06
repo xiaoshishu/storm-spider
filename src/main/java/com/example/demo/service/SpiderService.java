@@ -11,11 +11,15 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.net.www.http.HttpClient;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.proxy.Proxy;
+import us.codecraft.webmagic.proxy.SimpleProxyProvider;
 
 import java.net.URL;
 import java.net.URLConnection;
@@ -30,6 +34,8 @@ public class SpiderService implements PageProcessor {
 
     private String baseUrl = "http://www.cn716.com/";
 
+    private String ref = "";
+
     @Autowired
     private CompanyRepository companyRepository;
 
@@ -43,27 +49,16 @@ public class SpiderService implements PageProcessor {
         String referer = page.getUrl().get();
         Document document = Jsoup.parse(page.getRawText());
         try{
-            if (document.toString().contains("连续刷新本页面")) {
-                List<IPDetail> list = ipDetailRepository.findAll();
-                list.size();
-                int a = (int)(1+Math.random()*(list.size()-1+1));
-                IPDetail ipDetail = list.get(a);
-                String ip = ipDetail.getIp();
-                String port = ipDetail.getPort();
-                String url = page.getUrl().get();
-                System.getProperties().setProperty("http.proxyHost", ip);
-                System.getProperties().setProperty("http.proxyPort", port);
-                URL realUrl = new URL(url);
-                URLConnection conn = realUrl.openConnection();
-                // 设置通用的请求属性
-                conn.setRequestProperty("accept", "*/*");
-                conn.setRequestProperty("connection", "Keep-Alive");
-                conn.setRequestProperty("user-agent", "Mozilla/5.0 (Linux; U; Android 4.2.2; zh-cn; SCH-P709 Build/JDQ39) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1");
+            if (document.toString().contains("连续刷新本页面") || document.toString().contains("500 - 内部服务器错误")) {
+               page.setStatusCode(500);
+               page.setDownloadSuccess(false);
+
             }
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
         if (referer.equals("http://www.cn716.com/company")) {
+            site.addHeader("Referer", baseUrl);
             List<String>  list = page.getHtml().xpath("/html/body/div[@class='class2_content2']/div[@class='class2_2']/div[@style='clear:both;margin:8px auto;']/div[@class='city']/a/@href").all();
             List<String>  stringList = new ArrayList<>();
             for (String str : list) {
@@ -73,7 +68,7 @@ public class SpiderService implements PageProcessor {
             page.addTargetRequests(stringList);
 
         } else if (page.getUrl().regex("http://www.cn716.com/company[0-9]*-[0-9]*").match()) {
-
+            site.addHeader("Referer", page.getUrl().toString());
             page.addTargetRequests(
                     page.getHtml().xpath("/html/body/div[@class='class2_content']/div[@class='class2_content2']/div[@class='ul_right']/" +
                             "div/ul[@class='sell_new']/li/a/@href").all());
@@ -184,7 +179,6 @@ public class SpiderService implements PageProcessor {
         site.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
         site.addHeader("Accept-Encoding", "gzip, deflate");
         site.addHeader("Accept-Language", "zh-CN,zh;q=0.9");
-        site.addHeader("Referer", baseUrl);
         site.addHeader("Upgrade-Insecure-Requests", "1");
         site.setCharset("gb2312");
         return site;

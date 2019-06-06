@@ -1,8 +1,13 @@
 package com.example.demo;
 
+import com.example.annotation.annotation1.TestServiceImpl;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class ThreadTest {
+
+    @Autowired
+    TestServiceImpl testService;
 
     @Test
     public void testInterrupt() throws Exception{
@@ -23,6 +28,12 @@ public class ThreadTest {
 
 
 
+    }
+
+
+    @Test
+    public void testAnnation(){
+        testService.test();
     }
 
 
