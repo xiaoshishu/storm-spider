@@ -42,6 +42,21 @@ public class ThreadTest {
         testService.test();
     }
 
+    @Test
+    public void testArray(){
+        int[] array = new int[10];
+
+        array[5] = 1;
+        array[0] = 2;
+        array[1] = 3;
+        array[2] = 4;
+
+
+        for (int i = 0; i < array.length; i++) {
+            System.out.println(array[i]);
+        }
+    }
+
 
     @Test
     public void testCompe(){
