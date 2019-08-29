@@ -1,8 +1,13 @@
 package com.example.demo;
 
 import com.example.annotation.annotation1.TestServiceImpl;
+import com.example.demo.model.Student;
+import com.example.demo.model.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ThreadTest {
 
@@ -11,6 +16,7 @@ public class ThreadTest {
 
     @Test
     public void testInterrupt() throws Exception{
+        Student user = new Student();
         Thread t1 = new Thread(){
             @Override
             public void run() {
@@ -34,6 +40,24 @@ public class ThreadTest {
     @Test
     public void testAnnation(){
         testService.test();
+    }
+
+
+    @Test
+    public void testCompe(){
+        List<String> list = new ArrayList<>();
+
+        //list.sort(Comparator.comparing());
+        String string = "警惕";
+        int a = string.compareTo("电信");
+        System.out.println(a);
+
+        for (int i = 0; i < 10; i ++) {
+            for (int j = 0; j < 10 ;j++ ) {
+                break;
+            }
+            System.out.println(i);
+        }
     }
 
 

@@ -13,6 +13,7 @@ public class ExclaimBasicBolt extends BaseBasicBolt {
     @Override
     public void execute(Tuple tuple, BasicOutputCollector basicOutputCollector) {
         String sentence = (String)tuple.getValue(0);
+        String a = tuple.getStringByField("sentence");
         String out = sentence + "!";
         basicOutputCollector.emit(new Values(out));
     }

@@ -31,12 +31,12 @@ public class SpiderController implements CommandLineRunner {
             Spider.create(spiderService).addUrl("http://www.cn716.com/company").thread(1).run();
         }*/
         System.out.println("开始抓取");
-        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+        /*HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
         httpClientDownloader.setProxyProvider(
                 SimpleProxyProvider.from(
                         new Proxy("115.226.226.212", 8883),
                         new Proxy("114.217.98.26", 8883)));
-        Spider.create(spiderService).addUrl("http://www.cn716.com/company").thread(15).run();
+        Spider.create(spiderService).addUrl("http://www.cn716.com/company").thread(15).run();*/
 
     }
 
