@@ -35,9 +35,11 @@ public class MyLinkedList {
             last = insertdNode;
         } else {
             Node preNode = get(index - 1);
-            Node nextNode = preNode.next;
-            preNode.next = insertdNode;
-            insertdNode.next = nextNode;
+            if (preNode != null) {
+                Node nextNode = preNode.next;
+                preNode.next = insertdNode;
+                insertdNode.next = nextNode;
+            }
         }
         size ++;
 

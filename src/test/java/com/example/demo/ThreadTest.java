@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ThreadTest {
 
@@ -60,19 +63,49 @@ public class ThreadTest {
 
     @Test
     public void testCompe(){
-        List<String> list = new ArrayList<>();
+        // newCachedThreadPool 特点
+        // 1.核心线程数为0 , 线程最大数量是Integer的最大值。
+        // 2.线程的存活时间为60s
+        // 3.用的阻塞队列是SynchronousQueue(同步队列)
+        // 4.由于有一个任务就创建一个线程，
 
-        //list.sort(Comparator.comparing());
-        String string = "警惕";
-        int a = string.compareTo("电信");
-        System.out.println(a);
+        ExecutorService executorService = Executors.newCachedThreadPool();
+
+        for (int i =0 ; i < 10 ; i++) {
+            executorService.execute(() -> {
+                System.out.println("可缓存线程池" + Thread.currentThread().getName() + "正在执行");
+            });
+        }
+        // SingleThreadExecutor 特点
+        //1.核心线程池和最大线程数都是1
+        //2.线程存活时间是0 keepAliveTime
+        //3.阻塞队列LinkedBlockingQueue
+        //4.只有一个线程执行任务，如果当前线程被占用，则保存到阻塞队列中。
+        ExecutorService executorServiceForSingle = Executors.newSingleThreadExecutor();
 
         for (int i = 0; i < 10; i ++) {
-            for (int j = 0; j < 10 ;j++ ) {
-                break;
-            }
-            System.out.println(i);
+            executorServiceForSingle.execute(() -> {
+                System.out.println("单例线程池" + Thread.currentThread().getName() + "正在执行");
+            });
         }
+
+        // FixedThreadPool 特点
+        // 1.核心线程数和最大线程数一样大
+        // 2.没有所谓的空闲时间 keepAliveTime为0
+        // 3.阻塞队列用的LinkedBlockingQueue
+        // 4.使用不当会抛出OOM异常，适用于CPU密集型。线程执行长期任务。
+        ExecutorService executorServiceForFixed = Executors.newFixedThreadPool(10);
+
+        for (int i = 0; i < 10; i ++) {
+            executorServiceForFixed.execute(() -> {
+                System.out.println("固定数目线程池" + Thread.currentThread().getName() + "正在执行");
+            });
+        }
+
+
+
+
+
     }
 
 
